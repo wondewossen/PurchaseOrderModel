@@ -1,4 +1,3 @@
-{{ config(materialized='table') }}
 
 with Get_PurchaseOrder as (
     select p.*,c.customername

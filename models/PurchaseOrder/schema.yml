@@ -1,0 +1,16 @@
+
+version: 2
+
+models:
+    - name: Purchase_Order_Item
+      description: "Purchase Order Item Model"
+      config: 
+          materialized: table
+      columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+
+
