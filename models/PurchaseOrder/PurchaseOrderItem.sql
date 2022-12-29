@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 with Get_PurchaseOrder as (
     select p.*,c.customername
     from SPARC_RAW.S4_GF.PURORDITEM p
