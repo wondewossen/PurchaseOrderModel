@@ -1,20 +1,25 @@
   {{config( 
           materialized='incremental',
-          unique_key='POOrder' 
+          unique_key='POOrder', 'POItem' 
         )      
     }}    
-
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
     from SPARC_RAW.S4_GF.PURORDITEM p
         left outer join SPARC_RAW.S4_GF.CUSTOMER c
             on p.customer = c.customer
-
+                where (p.purchaseorder, p.purchaseorderitem, p.__timestamp) in
+                (select purchaseorder,purchaseorderItem, max(__timestamp) as __timestamp
+                    from SPARC_RAW.S4_GF.PURORDITEM group by 1,2)
     {% if is_incremental() %}        
-        where p.__timestamp < (select max(Createdatetime) from {{ this }})
+        and p.__timestamp >= (
+            select case when (select max(Createdatetime) from {{ this }}) is null
+                then (select min(__timestamp) from SPARC_RAW.S4_GF.PURORDITEM)
+                else (select max(Createdatetime) from {{ this }})
+                end
+        )
     {% endif %}
-
 ),
 
 Get_headerLevel as (
@@ -38,6 +43,7 @@ Get_Manufacturer as (
 
 select 
         purchaseorder       as POOrder,
+        purchaseorderItem   as POItem,
         customer            as CustomerNumber,
         customername        as BuyerName,
         supplier_name       as SellerName,
@@ -62,4 +68,4 @@ select
         sum(netordervalue)  as OrderTotalAmount,
         currencykey         as Currency
  from Get_Manufacturer 
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22
