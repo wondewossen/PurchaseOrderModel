@@ -1,12 +1,23 @@
+  {{config( 
+  --        materialized='incremental',
+  --        incremental_strategy='merge',
+  --        unique_key='Order' 
+        )      
+    }}    
+
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
     from SPARC_RAW.S4_GF.PURORDITEM p
         left outer join SPARC_RAW.S4_GF.CUSTOMER c
             on p.customer = c.customer
-    where (p.purchaseorder, p.purchaseorderitem, p.__timestamp) in
-            (select purchaseorder,purchaseorderItem, max(__timestamp) as __timestamp
-                  from SPARC_RAW.S4_GF.PURORDITEM group by 1,2)
+
+ --   {% if is_incremental() %}        
+    --where (p.purchaseorder, p.purchaseorderitem, p.__timestamp) in
+    --        (select purchaseorder,purchaseorderItem, max(__timestamp) as __timestamp
+    --              from SPARC_RAW.S4_GF.PURORDITEM where purchaseorder in ('4500000000','4500000275') group by 1,2)
+ --       where __timestamp > (select max(__create_datetime) from {{ this }})
+ --   {% endif %}
 ),
 
 Get_headerLevel as (
@@ -48,9 +59,10 @@ select
         termsofpaymentkey   as "Payment Term",
         changeddate         as "Modify Timestamp",
         ship_type_des       as "Shipment Method",
+        __timestamp         as "create_datetime",
         count(*)            as "Item Count",
         sum(orderqty)       as "Order Total Qty",
         sum(netordervalue)  as "Order Total Amount",
         currencykey         as "Currency"
  from Get_Manufacturer 
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,20
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21
