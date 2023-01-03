@@ -8,8 +8,8 @@ models:
  #         materialized: 'incremental'
  #         unique_key:'Order'
 
-#    - name: V_PURCHASE_ORDERITEM
-#      description: "Purchase Order Monitoring Report"
+    - name: my_first_dbt_modell
+      description: "First DBT model"
 #       config: 
 #          materialized: 'view'
 #         unique_key:'Order'
