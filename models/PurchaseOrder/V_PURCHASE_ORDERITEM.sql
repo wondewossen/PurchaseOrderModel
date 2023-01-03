@@ -1,8 +1,7 @@
   {{config( 
-          materialized='incremental',
           unique_key=['POOrder','POItem']
         )      
-    }}    
+    }} 
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
@@ -42,30 +41,30 @@ Get_Manufacturer as (
             on p.supplyingsupplier = s.supplier)
 
 select 
-        purchaseorder       as POOrder,
-        purchaseorderItem   as POItem,
-        customer            as CustomerNumber,
-        customername        as BuyerName,
-        supplier_name       as SellerName,
-        supplier            as VendorCode,
-        Manufacturer_name   as ManufacturerName,
+        purchaseorder       as "PO Order",
+        purchaseorderItem   as "PO Item",
+        customer            as "Customer Number",
+        customername        as "Buyer Name",
+        supplier_name       as "Seller Name",
+        supplier            as "Vendor Code",
+        Manufacturer_name   as "Manufacturer Name",
         case when deletion_idn is null 
                 then 'Open'
                 else 'Canceled'
-        end                 as OrderStatus,
-        podoctype           as OrderType,
-        shippingconditions  as POPriority,
-        crmrefordernumber   as CustomerPORefNo,
-        companycode         as BuyerCode,
-        incoterms1          as Incoterm,
-        incoterms2          as IncotermLocation,
-        termsofpaymentkey   as PaymentTerm,
-        changeddate         as ModifyTimestamp,
-        ship_type_des       as ShipmentMethod,
-        __timestamp         as Createdatetime,
-        count(*)            as ItemCount,
-        sum(orderqty)       as OrderTotalQty,
-        sum(netordervalue)  as OrderTotalAmount,
-        currencykey         as Currency
+        end                 as "Order Status",
+        podoctype           as "Order Type",
+        shippingconditions  as "PO Priority",
+        crmrefordernumber   as "Customer PO Ref No",
+        companycode         as "Buyer Code",
+        incoterms1          as "Incoterm",
+        incoterms2          as "Incoterm Location",
+        termsofpaymentkey   as "Payment Term",
+        changeddate         as "Modify Timestamp",
+        ship_type_des       as "Shipment Method",
+        __timestamp         as "Create Datetime",
+        count(*)            as "Item Count",
+        sum(orderqty)       as "Order Total Qty",
+        sum(netordervalue)  as "Order Total Amount",
+        currencykey         as "Currency"
  from Get_Manufacturer 
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22

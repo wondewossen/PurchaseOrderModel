@@ -8,6 +8,11 @@ models:
  #         materialized: 'incremental'
  #         unique_key:'Order'
 
+    - name: Purchase_OrderItem
+      description: "Purchase Order Item Model: Monitoring Report"
+ #     config: 
+ #         materialized: 'incremental'
+ #         unique_key:'Order'
       columns: 
           - name: Order
             description: "The primary key for this table"
