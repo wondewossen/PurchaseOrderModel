@@ -8,10 +8,10 @@ models:
  #         materialized: 'incremental'
  #         unique_key:'Order'
 
-    - name: Purchase_OrderItem
+    - name: V_Purchase_OrderItem
       description: "Purchase Order Item Model: Monitoring Report"
- #     config: 
- #         materialized: 'incremental'
+      config: 
+          materialized: 'view'
  #         unique_key:'Order'
       columns: 
           - name: Order

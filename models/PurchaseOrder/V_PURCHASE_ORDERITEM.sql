@@ -1,7 +1,3 @@
-  {{config( 
-          unique_key=['POOrder','POItem']
-        )      
-    }} 
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
