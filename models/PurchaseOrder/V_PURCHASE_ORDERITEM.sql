@@ -1,4 +1,6 @@
 
+{{ config(materialized='table') }}
+
 with Get_PurchaseOrder as (
     select p.*,c.customername
     from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM p
