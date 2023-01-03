@@ -1,3 +1,7 @@
+  {{config( 
+          materialized='view'
+        )      
+    }} 
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
