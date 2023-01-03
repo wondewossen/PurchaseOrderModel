@@ -10,7 +10,7 @@ models:
 
     - name: V_PURCHASE_ORDERITEM
       description: "Purchase Order Monitoring Report"
-      config: 
+ #      config: 
  #         materialized: 'view'
  #         unique_key:'Order'
  #     columns: 
