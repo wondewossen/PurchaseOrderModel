@@ -9,7 +9,7 @@ models:
  #         unique_key:'Order'
 
     - name: V_Purchase_OrderItem
-      description: "Purchase Order Item Model: Monitoring Report"
+      description: "Purchase Order Item Model Monitoring Report"
       config: 
           materialized: 'view'
  #         unique_key:'Order'

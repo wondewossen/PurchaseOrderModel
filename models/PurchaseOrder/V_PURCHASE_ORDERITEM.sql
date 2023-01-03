@@ -7,14 +7,6 @@ with Get_PurchaseOrder as (
                 where (p.purchaseorder, p.purchaseorderitem, p.__timestamp) in
                 (select purchaseorder,purchaseorderItem, max(__timestamp) as __timestamp
                     from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM group by 1,2)
-    {% if is_incremental() %}        
-        and p.__timestamp >= (
-            select case when (select max(Createdatetime) from {{ this }}) is null
-                then (select min(__timestamp) from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM)
-                else (select max(Createdatetime) from {{ this }})
-                end
-        )
-    {% endif %}
 ),
 
 Get_headerLevel as (
@@ -38,7 +30,6 @@ Get_Manufacturer as (
 
 select 
         purchaseorder       as "PO Order",
-        purchaseorderItem   as "PO Item",
         customer            as "Customer Number",
         customername        as "Buyer Name",
         supplier_name       as "Seller Name",
@@ -63,4 +54,4 @@ select
         sum(netordervalue)  as "Order Total Amount",
         currencykey         as "Currency"
  from Get_Manufacturer 
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21
