@@ -8,14 +8,14 @@ models:
  #         materialized: 'incremental'
  #         unique_key:'Order'
 
-    - name: V_PURCHASE_ORDERITEM
-      description: "Purchase Order Monitoring Report"
- #      config: 
- #         materialized: 'view'
- #         unique_key:'Order'
- #     columns: 
- #         - name: Order
- #           description: "The primary key for this table"
+#    - name: V_PURCHASE_ORDERITEM
+#      description: "Purchase Order Monitoring Report"
+#       config: 
+#          materialized: 'view'
+#         unique_key:'Order'
+#      columns: 
+#          - name: Order
+#            description: "The primary key for this table"
            # tests:
            #     - unique
            #     - not_null
