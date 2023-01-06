@@ -65,8 +65,9 @@ select
         currencykey         as "Currency"
  from Get_Manufacturer 
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21
-select *
-from Get_PurchaseOrder
+
+--select *
+--from Get_PurchaseOrder
 
 /*
     Uncomment the line below to remove records with null `id` values

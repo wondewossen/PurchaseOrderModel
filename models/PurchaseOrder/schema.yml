@@ -20,4 +20,5 @@ models:
            #     - unique
            #     - not_null
 
-
+    - name: purchaseOrdertest
+      description: "First DBT Testing Purchase Order"
