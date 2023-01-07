@@ -1,0 +1,24 @@
+
+version: 2
+
+models:
+    - name: Purchase_Order_Item
+      description: "Purchase Order Item Model"
+ #     config: 
+ #         materialized: 'incremental'
+ #         unique_key:'Order'
+
+    - name: my_first_dbt_model
+      description: "First DBT model"
+#       config: 
+#          materialized: 'view'
+#         unique_key:'Order'
+#      columns: 
+#          - name: Order
+#            description: "The primary key for this table"
+           # tests:
+           #     - unique
+           #     - not_null
+
+    - name: purchaseOrdertest
+      description: "First DBT Testing Purchase Order"
