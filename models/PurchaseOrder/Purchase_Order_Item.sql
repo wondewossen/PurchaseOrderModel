@@ -21,7 +21,6 @@ with Get_PurchaseOrder as (
         )
     {% endif %}
 ),
-
 Get_headerLevel as (
     select p.*, h.deletion_idn, h.ship_type_des
      from Get_PurchaseOrder as p  

@@ -22,3 +22,6 @@ models:
 
     - name: purchaseOrdertest
       description: "First DBT Testing Purchase Order"
+
+    - name: V_PURCHASE_ORDERITEM
+      description: "vIEW WITH  Testing Purchase Order"

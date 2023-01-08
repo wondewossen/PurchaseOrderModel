@@ -25,6 +25,7 @@ Get_Supplier as (
             on p.supplier = s.supplier
 ),
 
+
 Get_Manufacturer as (
     select p.*,s.suppliername as Manufacturer_name from Get_Supplier p
         left outer join SPARC_RAW.S4_GF.SUPPLIER s
