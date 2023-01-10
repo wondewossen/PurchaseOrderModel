@@ -1,70 +1,77 @@
   {{config( 
           materialized='incremental',
-          unique_key=['POOrder','POItem']
+          unique_key=['Po_Number','Po_Item']
         )      
     }}    
 
 with Get_PurchaseOrder as (
     select p.*,c.customername
-    from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM p
+    from SPARC_RAW.S4_GF.PURCHASE_ORD_ITEM p
         left outer join SPARC_RAW.S4_GF.CUSTOMER c
-            on p.customer = c.customer
-                where (p.purchaseorder, p.purchaseorderitem, p.__timestamp) in
-                (select purchaseorder,purchaseorderItem, max(__timestamp) as __timestamp
-                    from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM group by 1,2)
+            on p.kunnr = c.customer
+                where (p.EBELN, p.EBELP, p.__timestamp) in
+                (select EBELN,EBELP, max(__timestamp) as __timestamp
+                    from SPARC_RAW.S4_GF.PURCHASE_ORD_ITEM group by 1,2)
     {% if is_incremental() %}        
         and p.__timestamp >= (
-            select case when (select max(Createdatetime) from {{ this }}) is null
+            select case when (select max(Creation_ts) from {{ this }}) is null
                 then (select min(__timestamp) from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM)
-                else (select max(Createdatetime) from {{ this }})
+                else (select max(Creation_ts) from {{ this }})
                 end
         )
     {% endif %}
 ),
-Get_headerLevel as (
-    select p.*, h.deletion_idn, h.ship_type_des
-     from Get_PurchaseOrder as p  
-        left outer join SPARC_BASE_WOND_DEMISSIE.PUBLIC.PURORD_SHIP h
-            on p.purchaseorder = h.purchaseorder and ltrim(p.purchaseorderItem,'0') = h.purchaseorderItem
-            where h.higherlvl = '0'
-),
 
 Get_Supplier as (
-    select p.*, s.suppliername as supplier_name from Get_headerLevel p
+    select p.*, s.suppliername as supplier_name from Get_PurchaseOrder p
         left outer join SPARC_RAW.S4_GF.SUPPLIER s
-            on p.supplier = s.supplier
+            on p.LIFNR = s.supplier
 ),
 
 Get_Manufacturer as (
     select p.*,s.suppliername as Manufacturer_name from Get_Supplier p
         left outer join SPARC_RAW.S4_GF.SUPPLIER s
-            on p.supplyingsupplier = s.supplier)
+            on p.LLIEF = s.supplier)
+
 
 select 
-        purchaseorder       as POOrder,
-        purchaseorderItem   as POItem,
-        customer            as CustomerNumber,
-        customername        as BuyerName,
-        supplier_name       as SellerName,
-        supplier            as VendorCode,
-        Manufacturer_name   as ManufacturerName,
-        case when deletion_idn is null 
-                then 'Open'
-                else 'Canceled'
-        end                 as OrderStatus,
-        podoctype           as OrderType,
-        shippingconditions  as POPriority,
-        crmrefordernumber   as CustomerPORefNo,
-        companycode         as BuyerCode,
-        incoterms1          as Incoterm,
-        incoterms2          as IncotermLocation,
-        termsofpaymentkey   as PaymentTerm,
-        changeddate         as ModifyTimestamp,
-        ship_type_des       as ShipmentMethod,
-        __timestamp         as Createdatetime,
-        count(*)            as ItemCount,
-        sum(orderqty)       as OrderTotalQty,
-        sum(netordervalue)  as OrderTotalAmount,
-        currencykey         as Currency
- from Get_Manufacturer 
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22
+        EBELN                   as Po_Number,
+        EBELP                   as Po_Item,
+        BSART                   as Doc_Type,
+        STATU_H                 as PO_Status,
+        LOEKZ2                  as Deletion_Ind_Itm,
+        matnr                   as Material_Number,
+        LIFNR                   as Vendor_Number,
+        Manufacturer_name       as Vendor_Name,
+        LLIEF                   as Supplier_Number,  
+        Manufacturer_name       as Supplier_Name,                            
+        kunnr                   as Customer_Number,
+        customername            as Customer_Name,
+        PSTYP                   as Item_Category,
+        WERKS                   as Plant,
+        audat                   as Document_Date,
+        bsgru                   as Ordering_Reason,
+        bukrs                   as Company_Code,
+        lgort                   as Storage_Location,
+        aedat                   as Create_Date,
+        LASTCHANGEDATETIME      as Changed_Timestamp,
+        inco1                   as Incoterm1,
+        inco2                   as Incoterm2,
+        zterm                   as Payment_Term,
+        SHIPCOND                as Shipping_Condition,
+        SPE_CRM_REF_SO          as Crm_ref_number,
+        ERNAM                   as Person_Created,
+        PROCSTAT                as Proc_State,
+        infnr                   as Info_Record,
+        ABSKZ                   as Rejection_Ind,
+        erekz                   as Final_Invoice_Ind,
+        repos                   as Invoice_Receipt_Ind,
+        EVERS                   as Shipping_Instruction,
+        UEBPO                   as Higher_LevItem,
+        MENGE                   as Base_Unit_Measure,
+        waers                   as Currency,
+        NETWR                   as Net_Order_Value,
+        MENGE                   as Order_Quantity,
+        __timestamp             as Creation_TS
+
+ from Get_Manufacturer ;
