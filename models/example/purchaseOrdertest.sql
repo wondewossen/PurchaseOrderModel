@@ -8,6 +8,7 @@ with Get_PurchaseOrder as (
                     from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM group by 1,2)
 ),
 
+
 Get_headerLevel as (
     select p.*, h.deletion_idn, h.ship_type_des
      from Get_PurchaseOrder as p  
