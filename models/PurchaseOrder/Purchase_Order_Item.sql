@@ -15,7 +15,7 @@ with Get_PurchaseOrder as (
     {% if is_incremental() %}        
         and p.__timestamp >= (
             select case when (select max(Creation_ts) from {{ this }}) is null
-                then (select min(__timestamp) from DEV_WOND_DEMISSIE.PUBLIC.PURORDITEM)
+                then (select min(__timestamp) from SPARC_RAW.S4_GF.PURCHASE_ORD_ITEM)
                 else (select max(Creation_ts) from {{ this }})
                 end
         )
@@ -72,6 +72,7 @@ select
         waers                   as Currency,
         NETWR                   as Net_Order_Value,
         MENGE                   as Order_Quantity,
-        __timestamp             as Creation_TS
+        __timestamp             as Creation_TS,
+        current_timestamp       as load_datetime
 
- from Get_Manufacturer ;
+ from Get_Manufacturer 
