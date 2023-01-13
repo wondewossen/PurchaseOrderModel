@@ -2,6 +2,9 @@
 version: 2
 
 models:
+    - name: FACT_PURCHASE_ORDERITEM
+      description: "Purchase Order Item Base"
+
     - name: Purchase_Order_Item
       description: "Purchase Order Item Model"
  #     config: 
