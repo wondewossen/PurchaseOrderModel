@@ -5,8 +5,8 @@ models:
     - name: FACT_PURCHASE_ORDERITEM
       description: "Purchase Order Item Base"
 
-    - name: Purchase_Order_Item
-      description: "Purchase Order Item Model"
+#    - name: Purchase_Order_Item
+#      description: "Purchase Order Item Model"
  #     config: 
  #         materialized: 'incremental'
  #         unique_key:'Order'
@@ -23,8 +23,8 @@ models:
            #     - unique
            #     - not_null
 
-    - name: purchaseOrdertest
-      description: "First DBT Testing Purchase Order"
+#    - name: purchaseOrdertest
+#      description: "First DBT Testing Purchase Order"
 
     - name: PURCHASE_ORDERITEM
       description: "purchase Order View"
