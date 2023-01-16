@@ -31,10 +31,18 @@ Get_Supplier as (
 Get_Manufacturer as (
     select p.*,s.suppliername as Manufacturer_name from Get_Supplier p
         left outer join SPARC_RAW.S4_GF.SUPPLIER s
-            on p.LLIEF = s.supplier)
+            on p.LLIEF = s.supplier),
 
+Get_Product_Key as (
+    select o.*, p.BRAND_CODE,ITEM_PK from Get_Manufacturer as o
+        left outer join RBOK_RPT.REPORTING.DIM_PRODUCT as p
+        on matnr = item_num
+
+)
 
 select 
+        BRAND_CODE              as Brand_Code,
+        ITEM_PK                 AS Item_pk,
         EBELN                   as Po_Number,
         EBELP                   as Po_Item,
         BSART                   as Doc_Type,
@@ -68,11 +76,11 @@ select
         repos                   as Invoice_Receipt_Ind,
         EVERS                   as Shipping_Instruction,
         UEBPO                   as Higher_LevItem,
-        MENGE                   as Base_Unit_Measure,
+        meins                   as Base_Unit_Measure,
         waers                   as Currency,
         NETWR                   as Net_Order_Value,
         MENGE                   as Order_Quantity,
         __timestamp             as Creation_TS,
         current_timestamp       as load_datetime
 
- from Get_Manufacturer 
+ from Get_Product_Key 
